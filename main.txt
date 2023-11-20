@@ -1,0 +1,147 @@
+1) install mongoose, express
+2)For  MVC  pattern create the models, controllers, routes folder
+3) connect with the database like this 
+
+
+const MONGOOSE_URI = `mongodb+srv://admin:admin@cluster0.41qym7q.mongodb.net/_zomatoapp`
+
+mongoose.connect(MONGOOSE_URI).then(()=>{
+    console.log("databse connected successfully")
+    app.listen(3000,()=>console.log("listening on port 3000"))
+    
+}).catch((error)=>{
+    console.log(error)
+})
+
+4) Define a schema in the in the models folder based on our document type in the specific collection , in our case our database is _zomatoapp and collection name is users and schema is like this
+
+const Schema = mongoose.Schema;
+
+const UserSchema = new Schema({
+    id:{type:Number},
+    first_name:{type:String},
+    last_name:{type:String},
+    email:{type:String},
+    gender:{type: String},
+    city:{type:String},
+})
+
+
+5) create the model for perform various actions like CRUD in that collecrtion users like this , later export it to use in the controllers folder 
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const UserSchema = new Schema({
+    id:{type:Number},
+    first_name:{type:String},
+    last_name:{type:String},
+    email:{type:String},
+    gender:{type: String},
+    city:{type:String},
+})
+
+const UserModel = mongoose.model("user",UserSchema,"users")
+
+module.exports = UserModel
+
+
+6) In the controllers folder we have to do like this if we want fetch the data or read the data by using the UserModel
+from the users collction in the database _zomatoapp
+
+const getUserList = async(req,res)=>{
+
+    let result = await UserModel.find() // read the comment below
+      res.send({
+        status:true,
+        result,
+      })
+}
+
+
+
+7) 8 /11/23
+// creted the locationModel , RestaurantModel and fetched the data from the databse using mongoose with mongodDb and created the rest api 
+
+8) If we want the specific item based it property or based on user input, we have to use useparams and and inside the find method we have to write like this 
+
+   let {loc_id} = req.params
+    console.log(typeof loc_id)
+    const Restaurant_list = await Restaurant_Model.find({location_id:loc_id})
+    res.status(200).send({Restaurant_data:true,Restaurant_list})
+
+
+ 9) IF we want only some of the property form the an object , then we need to use projection iof mongodDb , we have to pass like this inside the find method 
+
+  const Restaurant_list = await Restaurant_Model.find({location_id:loc_id},{name:1,city1,locality:1,image:1})
+
+  the items which we want we have to give a value as 1 , the items which we dont want we can ignore it or pass there value as 0
+
+
+   {
+            "_id": "62f71de27824c682ccce799d",
+            "name": "Domino's",
+            "city": "Delhi",
+            "location_id": 1,
+            "city_id": 1,
+            "locality": "Shalimar Bagh",
+            "thumb": [
+                "assets/breakfast.png",
+                "assets/dinner.png",
+                "assets/drinks.png",
+                "assets/dinner.png"
+            ],
+            "aggregate_rating": 4.2,
+            "rating_text": "Very Good",
+            "min_price": 666,
+            "contact_number": "919453524651",
+            "cuisine_id": [
+                1,
+                2
+            ],
+            "cuisine": [
+                {
+                    "id": 1,
+                    "name": "North Indian"
+                },
+                {
+                    "id": 4,
+                    "name": "Fast Food"
+                }
+            ],
+            "image": "assets/breakfast.png",
+            "mealtype_id": 1
+        },
+
+        this hige data went from this to this , by using projection we nood need to use filter , and destructuring seperate logic to again filter the items 
+
+            {
+            "_id": "62f71de27824c682ccce799d",
+            "name": "Domino's",
+            "city": "Delhi",
+            "locality": "Shalimar Bagh",
+            "image": "assets/breakfast.png"
+        },
+
+
+10)
+findById is method in mongoose which will give the item based on its id ,similarly there are methods like findByIdAndDelete, findByIdAndRemove ,findbyidAndUpdate...
+
+const getRestaurantById = async(req,res)=>{
+    let {id} = req.params
+    const Restaurant_list = await Restaurant_Model.findById()
+    res.status(200).send({Restaurant_data:true,Restaurant_list})
+}
+
+
+11) next created MealTypeModel.js file in models folder and MealTypeController.js in controller file to crate the api for get_meal_types , mealtypes
+
+
+12) Next created MenuItemsModel file in models folder and menuItemscontrller for to crete the api for get_menu_items , get menu items
+
+13) we also created one additional api for menuitems by r_id the above api is optional but this is based on project
+
+
+
+9/11/23
+14) Installed cors and fetched the api get_meal_types in react zomato-app project
